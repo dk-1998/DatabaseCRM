@@ -1,0 +1,420 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DatabaseCRM • Insights</title>
+  <!-- Modern Font & Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --accent-primary: #3b82f6;
+      --accent-success: #10b981;
+      --accent-warning: #f59e0b;
+      --accent-danger: #ef4444;
+      --text-main: #1e293b;
+      --text-soft: #64748b;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 10% 20%, #1e293b, #0f172a);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Glassmorphism efekat */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.3), 0 4px 18px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .glass-card:hover {
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Navigacija */
+    .navbar-custom {
+      background: rgba(15, 23, 42, 0.85) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1rem 0;
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent !important;
+    }
+
+    .btn-soft {
+      border-radius: 40px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn-outline-light {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: white;
+      background: transparent;
+    }
+
+    .btn-outline-light:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+      color: white;
+    }
+
+    /* Headeri kartica */
+    .card-header-custom {
+      background: transparent;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 1.25rem 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Tabele */
+    .table {
+      margin-bottom: 0;
+      color: var(--text-main);
+    }
+
+    .table thead th {
+      background: #f8fafc;
+      color: var(--text-soft);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      border-bottom-width: 1px;
+      padding: 1rem 1.5rem;
+    }
+
+    .table tbody tr {
+      transition: background 0.15s;
+    }
+
+    .table tbody tr:hover {
+      background: #f1f5f9 !important;
+    }
+
+    .table td {
+      padding: 1rem 1.5rem;
+      vertical-align: middle;
+    }
+
+    /* AI Prediction stilizacija */
+    .prediction-table td {
+      white-space: pre-wrap;
+      vertical-align: top;
+      padding: 12px 18px;
+    }
+
+    .prediction-table .section-header {
+      font-weight: 700;
+      border-left: 4px solid;
+      background-color: #ffffff !important;
+    }
+
+    .prediction-table tr:hover td {
+      background-color: #fafafa;
+    }
+
+    /* Prilagodjavanje checkbox-a */
+    .form-check-input {
+      width: 1.2em;
+      height: 1.2em;
+      margin-top: 0;
+      cursor: pointer;
+      border: 2px solid #cbd5e1;
+    }
+
+    .form-check-input:checked {
+      background-color: var(--accent-primary);
+      border-color: var(--accent-primary);
+    }
+
+    /* Print stilovi */
+    @media print {
+      body {
+        background: white;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .glass-card {
+        background: white;
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+      }
+    }
+
+    /* Custom AI dugme - PLAVO */
+    .btn-ai-predict {
+      background: linear-gradient(145deg, #2563eb, #3b82f6);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.9rem 2.2rem;
+      border-radius: 60px;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .btn-ai-predict:hover {
+      background: linear-gradient(145deg, #1d4ed8, #2563eb);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.4);
+      color: white;
+    }
+
+    footer {
+      background: transparent;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigacija -->
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom no-print">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'dashboard' %}">
+      <i class="bi bi-database-fill-gear me-2"></i>DatabaseCRM
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" 
+            data-bs-target="#navbarNav" aria-controls="navbarNav" 
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center gap-2">
+        <li class="nav-item">
+          <span class="nav-link text-white-50">
+            <i class="bi bi-person-circle me-1"></i>{{ user.username }}
+          </span>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-soft btn-outline-light" href="{% url 'register' %}">
+            <i class="bi bi-person-plus me-1"></i>Register
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-soft btn-primary" href="{% url 'login' %}" style="background: #3b82f6; border: none;">
+            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white-50" href="{% url 'logout' %}">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Glavni sadržaj -->
+<main class="container my-5 flex-grow-1">
+  
+  <!-- Klijenti -->
+  <div class="glass-card p-0 mb-5 overflow-hidden">
+    <div class="card-header-custom">
+      <i class="bi bi-people-fill fs-3" style="color: #3b82f6;"></i>
+      <h4 class="mb-0 fw-semibold">Clients Directory</h4>
+      <span class="badge bg-primary bg-opacity-10 text-primary ms-3 px-3 py-2 rounded-pill">
+        {{ clients|length }} active
+      </span>
+    </div>
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Email Address</th>
+            <th>Phone Number</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for client in clients %}
+          <tr>
+            <td class="fw-medium"><i class="bi bi-person-vcard me-2 text-secondary"></i>{{ client.full_name }}</td>
+            <td><i class="bi bi-envelope me-2 text-secondary"></i>{{ client.email }}</td>
+            <td><i class="bi bi-telephone me-2 text-secondary"></i>{{ client.phone }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" class="text-center py-5 text-secondary">
+            <i class="bi bi-emoji-frown fs-1 d-block mb-2"></i> No clients in database
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Narudžbine sa Checkbox-ovima -->
+  <div class="glass-card p-0 mb-5 overflow-hidden">
+    <div class="card-header-custom">
+      <i class="bi bi-box-seam fs-3" style="color: #8b5cf6;"></i>
+      <h4 class="mb-0 fw-semibold">Recent Orders</h4>
+      <span class="badge bg-purple bg-opacity-10 text-purple ms-3 px-3 py-2 rounded-pill" style="background:#f3e8ff; color:#6b21a8;">
+        {{ orders|length }} total
+      </span>
+    </div>
+    <form method="post">
+      {% csrf_token %}
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th style="width: 40px;">
+                <input class="form-check-input" type="checkbox" id="selectAll" onclick="toggleAll(this)">
+              </th>
+              <th>Product</th>
+              <th>Client</th>
+              <th>Price</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+            <tr>
+              <td>
+                <input class="form-check-input order-checkbox" type="checkbox" name="selected_orders" value="{{ order.id }}">
+              </td>
+              <td class="fw-medium">{{ order.product_name }}</td>
+              <td>{{ order.client.full_name }}</td>
+              <td><span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">${{ order.price }}</span></td>
+              <td><i class="bi bi-calendar3 me-2 text-secondary"></i>{{ order.created_at|date:"M d, Y • H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center py-5 text-secondary">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i> No orders placed yet
+            </td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- AI dugme -->
+      <div class="p-4 d-flex flex-wrap align-items-center justify-content-between border-top">
+       <button type="submit" name="ai_predict" class="btn btn-ai-predict">
+Predict Customer Behavior
+        </button>
+        <div class="text-muted small mt-2 mt-sm-0">
+          <i class="bi bi-info-circle me-1"></i> Select specific orders or leave all selected for full analysis.
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- AI Predikcija -->
+  {% if prediction_rows %}
+  <div class="glass-card p-0 mb-4 overflow-hidden">
+    <div class="card-header-custom" style="background: linear-gradient(90deg, #f8fafc, transparent);">
+      <i class="bi bi-robot fs-3" style="color: #4f46e5;"></i>
+      <h4 class="mb-0 fw-semibold">AI Behavioral Insights</h4>
+    </div>
+    <div class="p-4">
+      <div class="table-responsive rounded-3 border">
+        <table class="table prediction-table mb-0">
+          <tbody>
+            {% for row in prediction_rows %}
+            <tr>
+              {% if '📊' in row or 'SUMMARY' in row or 'SAŽETAK' in row %}
+              <td class="section-header" style="border-left-color: #3b82f6; background: #f0f9ff !important;">
+                <i class="bi bi-bar-chart-steps me-2"></i>{{ row }}
+              </td>
+              {% elif '👥' in row or 'CLIENT' in row or 'KLIJENT' in row %}
+              <td class="section-header" style="border-left-color: #f59e0b; background: #fffbeb !important;">
+                <i class="bi bi-people me-2"></i>{{ row }}
+              </td>
+              {% elif '🎯' in row or 'PREPORUK' in row or 'RECOMMENDATION' in row %}
+              <td class="section-header" style="border-left-color: #10b981; background: #ecfdf5 !important;">
+                <i class="bi bi-bullseye me-2"></i>{{ row }}
+              </td>
+              {% elif '⚠️' in row or 'RISK' in row or 'RIZIK' in row %}
+              <td class="section-header" style="border-left-color: #ef4444; background: #fef2f2 !important;">
+                <i class="bi bi-exclamation-triangle me-2"></i>{{ row }}
+              </td>
+              {% elif '💡' in row or 'CROSS' in row or 'SELLING' in row %}
+              <td class="section-header" style="border-left-color: #8b5cf6; background: #f5f3ff !important;">
+                <i class="bi bi-lightbulb me-2"></i>{{ row }}
+              </td>
+              {% elif '═' in row %}
+              <td style="padding: 5px 18px; color: #94a3b8; font-weight: 300; text-align: center;">{{ row }}</td>
+              {% elif '👤' in row %}
+              <td style="padding: 10px 18px; color: #1e293b; font-weight: 600; background: #f8fafc;">{{ row }}</td>
+              {% else %}
+              <td style="padding: 10px 18px; color: #334155;">{{ row }}</td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 no-print">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary rounded-pill px-4">
+          <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</main>
+
+<!-- Footer -->
+<footer class="text-center py-4 no-print">
+  <div class="container">
+    <small class="text-white-50">
+      <i class="bi bi-c-circle"></i> 2026 DatabaseCRM • 
+      <span class="d-inline-block">Powered by Django & OpenAI</span>
+    </small>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Select/Deselect all
+  function toggleAll(source) {
+    const checkboxes = document.querySelectorAll('.order-checkbox');
+    for (let cb of checkboxes) cb.checked = source.checked;
+  }
+
+  // Ažuriranje "Select All" kad se ručno klikće
+  document.querySelectorAll('.order-checkbox').forEach(cb => {
+    cb.addEventListener('change', function() {
+      const allBox = document.getElementById('selectAll');
+      if (!this.checked) allBox.checked = false;
+    });
+  });
+</script>
+
+</body>
+</html>
